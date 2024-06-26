@@ -2,14 +2,17 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="Ical.Net" Version="4.2.0" />
+    <PackageReference Include="Microsoft.Playwright.MSTest" Version="1.44.0" />
+    <PackageReference Include="PuppeteerExtraSharp" Version="2.0.0" />
+    <PackageReference Include="PuppeteerSharp" Version="18.0.1" />
     <PackageReference Include="ScrapySharp" Version="3.0.0" />
   </ItemGroup>
 

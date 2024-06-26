@@ -1,195 +1,281 @@
-﻿using System.Text.RegularExpressions;
-using System.Web;
-
-using HtmlAgilityPack;
-
-using Ical.Net;
-using Ical.Net.CalendarComponents;
+﻿using Ical.Net;
 using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
 
-using ScrapySharp.Extensions;
-using ScrapySharp.Network;
+using Microsoft.Playwright;
 
-internal static class Program
+using System.Text.Json;
+
+namespace SchoolDistrictCalendar;
+
+class Program
 {
-	private static IDateTime _datestamp = new CalDateTime(DateTime.Now);
-	private static string _tzId = "Pacific Standard Time";//"America/Los_Angeles";
+	private static IDateTime _datestamp = CalDateTime.Today;
+	private static List<EventDetails> _eventDetailsCollection = new List<EventDetails>();
+	private static List<EventDetails> _keyEventDetailsCollection = new List<EventDetails>();
 
-	static void Main()
+	static async Task Main(string[] args)
 	{
-		SchoolYearEvent[][] schoolYears = GetSchoolYearEvents();
-		GenerateCalendar(schoolYears);
-	}
+		string cacheFilePath1 = @"EventDetails.json";
+		string cacheFilePath2 = @"KeyEventDetails.json";
 
-	private static SchoolYearEvent[][] GetSchoolYearEvents()
-	{
-		string _calendarUrl = "https://salkeiz.k12.or.us/about-us/yearly-calendars/";
-		ScrapingBrowser _browser = new ScrapingBrowser();
-		WebPage webpage = _browser.NavigateToPage(new Uri(_calendarUrl));
-
-		var html = webpage.Html;
-
-		HtmlNode keyDatesNode = html.SelectSingleNode("//*[text()='KEY DATES']");
-
-		if (keyDatesNode == null)
+		// create cache if missing
+		if (!File.Exists(cacheFilePath1) || !File.Exists(cacheFilePath2))
 		{
-			throw new Exception("Unable to find KEY DATES");
+			string url = "https://salkeiz.k12.or.us/about/calendar";
+			await Browse(url, false, async (page, response) => await OnBrowse(page));
+
+			string json1 = JsonSerializer.Serialize(_eventDetailsCollection, new JsonSerializerOptions { WriteIndented = true });
+			File.WriteAllText(cacheFilePath1, json1);
+
+			string json2 = JsonSerializer.Serialize(_keyEventDetailsCollection, new JsonSerializerOptions { WriteIndented = true });
+			File.WriteAllText(cacheFilePath2, json2);
 		}
 
-		HtmlNode[] schoolYearNodes = FindSchoolYears(keyDatesNode);
-		HtmlNode[] tableNodes = FindTables(keyDatesNode);
-		HtmlNode[][] rows = tableNodes.Select(x => x.CssSelect("tr").ToArray()).ToArray();
-
-		return schoolYearNodes.Zip(rows).Select(ab => GetSchoolYearEvents(ab.First, ab.Second)).ToArray();
-	}
-
-	private static void GenerateCalendar(SchoolYearEvent[][] schoolYears)
-	{
-		foreach (var schoolYear in schoolYears)
+		// load cache
 		{
-			var calendar = new Calendar();
-			calendar.Method = "PUBLISH";
-			//calendar.Group = "School Calendar";
-			//calendar.Name = "School Calendar";
-			//calendar.ProductId = "-//School Calendar//NONSGML School Calendar//EN";
-			//calendar.TimeZones.Add(new VTimeZone("America/Los_Angeles"));
-			calendar.AddProperty("X-WR-CALNAME", "School Calendar");
+			var json1 = File.ReadAllText(cacheFilePath1);
+			_eventDetailsCollection = JsonSerializer.Deserialize<List<EventDetails>>(json1, new JsonSerializerOptions { WriteIndented = true });
 
-			foreach (var schoolYearEvent in schoolYear)
+			var json2 = File.ReadAllText(cacheFilePath2);
+			_keyEventDetailsCollection = JsonSerializer.Deserialize<List<EventDetails>>(json2, new JsonSerializerOptions { WriteIndented = true });
+		}
+
+		// process cache
+		{
+			List<EventDetails> toAdd = [];
+			ILookup<DateOnly, EventDetails> eventDetailsCollection = _eventDetailsCollection.ToLookup(x => x.DayOfEvent);
+
+			foreach (var keyEventDetails in _keyEventDetailsCollection)
 			{
-				var e = new CalendarEvent
+				if (eventDetailsCollection.Contains(keyEventDetails.DayOfEvent))
 				{
-					Start = new CalDateTime(schoolYearEvent.DateHead),
-					End = new CalDateTime(schoolYearEvent.DateTail),
-					Summary = schoolYearEvent.Summary,
-					IsAllDay = true,
-					Categories = new List<string> { "School Event" },
-					Class = "PUBLIC",
-					Created = _datestamp,
-					LastModified = _datestamp,
-					Priority = 5,
-					Transparency = "TRANSPARENT",
-				};
+					var eventDetails = eventDetailsCollection[keyEventDetails.DayOfEvent].First();
 
-				calendar.Events.Add(e);
+					if (eventDetails != null)
+					{
+						eventDetails.SetKeyEvent(true);
+					}
+					else
+					{
+						throw new NotImplementedException();
+					}
+				}
+				else
+				{
+					toAdd.Add(keyEventDetails);
+				}
 			}
 
-			var serializer = new CalendarSerializer();
-			var serializedCalendar = serializer.SerializeToString(calendar);
+			var allEventDetails = eventDetailsCollection.Select(x => x.First()).Concat(toAdd).OrderBy(x => x.DayOfEvent).ThenBy(x => x.StartTime).ToArray();
 
-			var yearHead = schoolYear.First().DateHead.Year;
-			var yearTail = schoolYear.Last().DateTail.Year;
-			File.WriteAllText($"Salem-Keizer_School-Year_Calendar_{yearHead}-{yearTail}.ics", serializedCalendar);
+			GenerateCalendar(allEventDetails);
 		}
 	}
 
-	private static SchoolYearEvent[] GetSchoolYearEvents(HtmlNode schoolYear, HtmlNode[] rows)
+	private static async Task Browse(string url, bool update, Func<IPage, IResponse?, Task> action)
 	{
-		return rows.Select(x => MakeSchoolYearEvent(schoolYear, x)).ToArray();
-	}
-
-	private static SchoolYearEvent MakeSchoolYearEvent(HtmlNode schoolYear, HtmlNode schoolEventRow)
-	{
-		var year = schoolYear.InnerText.Trim();
-		var columns = schoolEventRow.CssSelect("td").ToArray();
-		var date = columns[0].InnerText.Trim();
-		var schoolEvent = columns[1].InnerText.Trim();
-
-		return new SchoolYearEvent(year, date, schoolEvent);
-	}
-
-	private static HtmlNode[] FindTables(HtmlNode node)
-	{
-		HtmlNode[] nodes = Array.Empty<HtmlNode>();
-
-		while (nodes.Length == 0 && node.ParentNode != null)
+		IPlaywright playwright = await Playwright.CreateAsync();
+		IBrowser browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
 		{
-			node = node.ParentNode;
-			nodes = node.CssSelect("table").ToArray();
+			Headless = false,
+		});
+		//var bco = new BrowserNewContextOptions()
+		//{
+		//	RecordHarContent = HarContentPolicy.Embed,
+		//	RecordHarMode = HarMode.Full,
+		//	RecordHarOmitContent = false,
+		//	RecordHarPath = harPath,
+		//};
+
+		IBrowserContext context = await browser.NewContextAsync();
+		IPage page = await context.NewPageAsync();
+		//await page.RouteFromHARAsync(harPath, new()
+		//{
+		//	UpdateContent = RouteFromHarUpdateContentPolicy.Embed,
+		//	UpdateMode = HarMode.Full,
+		//	Update = update,
+		//});
+		IResponse? response = await page.GotoAsync(url);
+
+		await Task.Delay(1000);
+
+		await action.Invoke(page, response);
+
+		await Task.Delay(1000);
+
+		await page.CloseAsync();
+		await context.CloseAsync();
+		await context.DisposeAsync();
+		await browser.DisposeAsync();
+		playwright.Dispose();
+	}
+
+	//private static async Task HandleSavePageAsync(IPage page)
+	//{
+	//	await page.GetByLabel("Previous Month").ClickAsync();
+	//	await Task.Delay(1000);
+
+	//	for (var i = 0; i < 12; i++)
+	//	{
+	//		await page.GetByLabel("Next Month").ClickAsync();
+	//		await Task.Delay(1000);
+	//	}
+	//}
+
+	private static async Task OnBrowse(IPage page)
+	{
+		await CaptureKeyEventsAsync(page);
+
+		await page.GetByLabel("Previous Month").ClickAsync();
+		await Task.Delay(1000);
+
+		for (int i = 0; i < 12; i++)
+		{
+			await page.GetByLabel("Next Month").ClickAsync();
+			await Task.Delay(1000);
+
+			await CaptureEventsAsync(page);
 		}
-
-		return nodes;
 	}
 
-	private static HtmlNode[] FindSchoolYears(HtmlNode node)
+	private static async Task CaptureKeyEventsAsync(IPage page)
 	{
-		HtmlNode[] nodes = Array.Empty<HtmlNode>();
-
-		while (nodes.Length == 0 && node.ParentNode != null)
-		{
-			node = node.ParentNode;
-			nodes = node.SelectNodes("//*[text()[contains(.,'School Year')]]")
-				.Where(x => Regex.IsMatch(x.InnerText, @"^[0-9\-]+ School Year"))
-				.ToArray();
-		}
-
-		return nodes;
-	}
-}
-
-internal class SchoolYearEvent
-{
-	public DateTime DateHead { get; }
-	public DateTime DateTail { get; }
-	public string Summary { get; }
-
-	public SchoolYearEvent(string schoolYear, string date, string schoolEvent)
-	{
-		var sy = Regex.Match(schoolYear, @"([0-9]{4})\-([0-9]{2})");
-
-		if (!sy.Success || sy.Groups.Count != 3)
-		{
-			throw new Exception("Unable to find school year");
-		}
-
-		var yearHead = sy.Groups[1].Value;
-		var yearTail = "20" + sy.Groups[2].Value;
-
-		var monthDays = Regex.Split(date, @" *\- *");
-
-		var monthDayHead = monthDays[0];
-		var monthDayTail = monthDays[0];
-
-		if (monthDays.Length == 2)
-		{
-			monthDayTail = monthDays[1];
-
-			if (monthDayTail.Length < 4)
+		_keyEventDetailsCollection = (await page.QuerySelectorAllAsync("div.fsDayContainer > article"))
+			.Select(async x =>
 			{
-				monthDayTail = monthDayHead.Substring(0, 4) + monthDayTail;
-			}
-		}
+				string title = await (await x.QuerySelectorAsync("div.fsTitle > a.fsCalendarEventLink")).InnerTextAsync();
+				IElementHandle? elementHandle = await x.QuerySelectorAsync("time");
+				string? datetime = await elementHandle.GetAttributeAsync("datetime");
+				var datestamp = DateTime.Parse(datetime);
 
-		DateHead = DateTime.ParseExact($"{monthDayHead} {yearHead}", "MMM d yyyy", null);
-		DateTail = DateTime.ParseExact($"{monthDayTail} {yearHead}", "MMM d yyyy", null);
+				var dayOfEvent = new DateOnly(datestamp.Year, datestamp.Month, datestamp.Day);
+				var startTime = new TimeOnly(0, 0, 0);
+				var endTime = new TimeOnly(23, 59, 59);
+				var eventDetails = new EventDetails(dayOfEvent, startTime, endTime, title, true);
 
-		if (DateHead.Month < 8)
-		{
-			DateHead = DateHead.AddYears(1);
-		}
-
-		if (DateTail.Month < 8)
-		{
-			DateTail = DateTail.AddYears(1);
-		}
-
-		if (DateTail != DateHead)
-		{
-			DateTail = DateTail.AddDays(1);
-		}
-
-		Summary = HttpUtility.HtmlDecode(schoolEvent);
+				return eventDetails;
+			})
+			.Select(x => x.Result)
+			.ToList();
 	}
 
-	public override string ToString()
+	private static async Task CaptureEventsAsync(IPage page)
 	{
-		return "" +
-			DateHead.ToString("MM/dd/yy") +
-			"-" +
-			DateTail.ToString("MM/dd/yy") +
-			" " +
-			Summary +
-			"";
+		IElementHandle[] fsCalendarDayboxs = (await page.QuerySelectorAllAsync("div.fsCalendarDaybox")).ToArray();
+		string?[] fsCalendarDayboxsDEBUG = fsCalendarDayboxs.Select(x => x.TextContentAsync().Result).ToArray();
+
+		for (int i = 0; i < fsCalendarDayboxs.Length; i++)
+		{
+			IElementHandle fsCalendarDaybox = fsCalendarDayboxs[i];
+
+			DateOnly dateOnly = default;
+			string? title = default;
+
+			string html = await fsCalendarDaybox.InnerHTMLAsync();
+			/*
+			<div class="fsCalendarDate" data-day="29" data-year="2024" data-month="4"><span class="fsCalendarDay">Wed,</span> <span class="fsCalendarMonth">May</span> 29</div>
+			<div class="fsCalendarInfo">
+				<a class="fsCalendarEventTitle fsCalendarEventLink" title="Question. Persuade. Refer. for Youth &amp; Families " data-occur-id="1711916" href="#">Question. Persuade. Refer. for Youth &amp; Families</a>
+				<div class="fsTimeRange">
+					<time datetime="2024-05-29T17:45:00-07:00" class="fsStartTime"><span class="fsHour"> 5</span>:<span class="fsMinute">45</span> <span class="fsMeridian">PM</span></time>
+					<span class="fsTimeSeperator"> - </span>
+					<time datetime="2024-05-29T20:00:00-07:00" class="fsEndTime"><span class="fsHour"> 8</span>:<span class="fsMinute">00</span> <span class="fsMeridian">PM</span></time>
+				</div>
+			</div>
+			*/
+
+			IElementHandle? fsCalendarInfo = await fsCalendarDaybox.QuerySelectorAsync("div.fsCalendarInfo");
+
+			IElementHandle? a = await fsCalendarDaybox.QuerySelectorAsync("a");
+
+			if (a != null)
+			{
+				title = await a.TextContentAsync();
+			}
+
+			if (!string.IsNullOrWhiteSpace(title))
+			{
+				IElementHandle? fsCalendarDate = await fsCalendarDaybox.QuerySelectorAsync("div.fsCalendarDate");
+
+				int dataday = int.Parse(await fsCalendarDate.GetAttributeAsync("data-day"));
+				int datayear = int.Parse(await fsCalendarDate.GetAttributeAsync("data-year"));
+				int datamonth = int.Parse(await fsCalendarDate.GetAttributeAsync("data-month"));
+				dateOnly = new DateOnly(datayear, datamonth + 1, dataday);
+
+				var startTime = new TimeOnly(0, 0, 0);
+				var endTime = new TimeOnly(23, 59, 59);
+
+				IElementHandle? fsTimeRange = await fsCalendarDaybox.QuerySelectorAsync("div.fsTimeRange");
+
+				if (fsTimeRange != null)
+				{
+					IReadOnlyList<IElementHandle> times = await fsTimeRange.QuerySelectorAllAsync("time");
+					DateTime[] timesText = times.Select(async x => await x.GetAttributeAsync("datetime")).Select(x => DateTime.Parse(x.Result)).ToArray();
+
+					if (timesText.Length == 1)
+					{
+						startTime = ToTimeOnly(timesText[0]);
+						endTime = ToTimeOnly(timesText[0]);
+					}
+					else if (timesText.Length == 2)
+					{
+						startTime = ToTimeOnly(timesText[0]);
+						endTime = ToTimeOnly(timesText[1]);
+					}
+					else if (timesText.Length > 2)
+					{
+					}
+				}
+
+				_eventDetailsCollection.Add(new EventDetails(dateOnly, startTime, endTime, title, false));
+			}
+		}
+	}
+
+	private static void GenerateCalendar(EventDetails[] schoolYears)
+	{
+		var calendar = new Calendar();
+		calendar.Method = "PUBLISH";
+		//calendar.Group = "School Calendar";
+		//calendar.Name = "School Calendar";
+		//calendar.ProductId = "-//School Calendar//NONSGML School Calendar//EN";
+		//calendar.TimeZones.Add(new VTimeZone("America/Los_Angeles"));
+		calendar.AddProperty("X-WR-CALNAME", "School Calendar");
+
+		foreach (EventDetails schoolYearEvent in schoolYears)
+		{
+			TimeOnly dh = schoolYearEvent.StartTime;
+			TimeOnly dt = schoolYearEvent.EndTime;
+			DateOnly day = schoolYearEvent.DayOfEvent;
+
+			var e = new Ical.Net.CalendarComponents.CalendarEvent
+			{
+				Start = new CalDateTime(day.Year, day.Month, day.Day, dh.Hour, dh.Minute, dh.Second),
+				End = new CalDateTime(day.Year, day.Month, day.Day, dt.Hour, dt.Minute, dt.Second),
+				Summary = schoolYearEvent.Title,
+				IsAllDay = true,
+				Categories = new List<string> { "School Event" },
+				Class = "PUBLIC",
+				Created = _datestamp,
+				LastModified = _datestamp,
+				Priority = 5,
+				Transparency = "TRANSPARENT",
+			};
+
+			calendar.Events.Add(e);
+		}
+
+		var serializer = new CalendarSerializer();
+		string serializedCalendar = serializer.SerializeToString(calendar);
+
+		int yearHead = schoolYears.First().DayOfEvent.Year;
+		int yearTail = schoolYears.Last().DayOfEvent.Year;
+		File.WriteAllText($"Salem-Keizer_School-Year_Calendar_{yearHead}-{yearTail}.ics", serializedCalendar);
+	}
+
+	private static TimeOnly ToTimeOnly(DateTime dateTime)
+	{
+		return new TimeOnly(dateTime.Hour, dateTime.Minute, dateTime.Second);
 	}
 }
