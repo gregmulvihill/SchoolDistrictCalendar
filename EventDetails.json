@@ -1,0 +1,562 @@
+[
+  {
+    "day_of_event": "2025-08-02",
+    "start_time": "08:00:00",
+    "end_time": "13:00:00",
+    "title": "School Board Retreat",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-08-12",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-08-26",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-09-01",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - District Offices Closed",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-09-02",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "First Day for Grades 6 & 9",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-09-03",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "First Day for Grades 1-5, 7, 8, 10-12",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-09-08",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "Kindergarten Transition",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-09-09",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "Kindergarten Transition",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-09-10",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "First Day for All Kindergarten Students",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-09-23",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-10-10",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - In-service Day",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-10-14",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-10-22",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Fall Conference",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-10-23",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Fall Conference",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-10-24",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-10-28",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-10-28",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-11-11",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - District Offices Closed",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-11-18",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-11-26",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-11-27",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - District Offices Closed",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-11-28",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - District Offices Closed",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-05",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Grading Day/Staff Development",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-08",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "Trimester Two Begins (Middle Schools)",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-09",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-22",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Winter Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-23",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Winter Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-24",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - District Offices Closed",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-25",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - District Offices Closed",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-26",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Winter Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-29",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Winter Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-30",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Winter Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-31",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Winter Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-01-01",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - District Offices Closed",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-01-02",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Winter Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-29",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Winter Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-30",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Winter Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2025-12-31",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Winter Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-01-01",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - District Offices Closed",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-01-02",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Winter Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-01-10",
+    "start_time": "08:00:00",
+    "end_time": "13:00:00",
+    "title": "School Board Retreat",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-01-13",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-01-19",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - District Offices Closed",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-01-27",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-01-30",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Grading Day/Staff Development",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-02-02",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "Semester Two Begins (High Schools)",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-02-10",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-02-16",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-02-24",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-03-10",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-03-11",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Grading Day/Staff Development",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-03-12",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Spring Conferences",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-03-13",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-03-16",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "Trimester Three Begins (Middle Schools)",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-03-23",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Spring Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-03-24",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Spring Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-03-25",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Spring Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-03-26",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Spring Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-03-27",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Spring Break",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-04-14",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-04-28",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-05-01",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Grading Day/Staff Development",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-04-28",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-05-01",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Grading Day/Staff Development",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-05-05",
+    "start_time": "18:00:00",
+    "end_time": "18:00:00",
+    "title": "Budget Committee Meeting (Superintendent's Budget Message)",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-05-12",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-05-13",
+    "start_time": "18:00:00",
+    "end_time": "18:00:00",
+    "title": "Budget Committee Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-05-18",
+    "start_time": "18:00:00",
+    "end_time": "18:00:00",
+    "title": "Budget Committee Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-05-19",
+    "start_time": "18:00:00",
+    "end_time": "18:00:00",
+    "title": "Budget Committee Meeting (Tentative)",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-05-20",
+    "start_time": "18:00:00",
+    "end_time": "18:00:00",
+    "title": "Budget Committee Meeting (Tentative)",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-05-25",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - District Offices Closed",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-06-03",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "High School Graduation",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-06-04",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "High School Graduation",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-06-05",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "High School Graduation",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-06-09",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-06-10",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "Last Day for K-5 Grade Students",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-06-11",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "Last Day for 6-11 Grade Students",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-06-12",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "No School - Grading Day/Staff Development",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-06-19",
+    "start_time": "00:00:00",
+    "end_time": "23:59:59",
+    "title": "District Offices Closed",
+    "key_event": false
+  },
+  {
+    "day_of_event": "2026-06-23",
+    "start_time": "18:00:00",
+    "end_time": "21:00:00",
+    "title": "School Board Meeting",
+    "key_event": false
+  }
+]
